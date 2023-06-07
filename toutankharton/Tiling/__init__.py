@@ -20,10 +20,8 @@ for layer in tmx_data.visible_layers:
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            pygame.quit()
             sys.exit()
     screen.fill("black")
     sprite_group.draw(screen)
     pygame.display.flip()
-
-pygame.quit()
