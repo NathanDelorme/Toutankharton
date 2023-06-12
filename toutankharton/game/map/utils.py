@@ -42,6 +42,6 @@ class List2D:
         for y in range(self.size.y):
             for x in range(self.size.x):
                 pos = Vector2(x, y)
-                res += str(self.get_cell(pos))
+                res += str(self.get_cell(pos)).center(3)
             res += "\n"
         return res

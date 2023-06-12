@@ -27,6 +27,7 @@ class Dungeon(List2D):
         self.set_end_room()
 
         print(self)
+        print(self.solved_maze)
         print("start : " + str(self.start_room.pos))
         print("end : " + str(self.end_room.pos))
 
@@ -210,13 +211,13 @@ class Room(List2D):
             self.set_cell(Vector2(temp_middle, 1), 3)
             self.set_cell(Vector2(temp_middle + 1, 1), 3)
 
-            if self.get_cell(Vector2(temp_middle - 1, 2)) == 0:
+            if self.get_cell(Vector2(temp_middle - 1, 2)) != 1:
                 self.set_cell(Vector2(temp_middle - 1, 2), 3)
-            if self.get_cell(Vector2(temp_middle - 1, 2)) == 0:
+            if self.get_cell(Vector2(temp_middle - 1, 2)) != 1:
                 self.set_cell(Vector2(temp_middle - 1, 2), 3)
-            if self.get_cell(Vector2(temp_middle, 2)) == 0:
+            if self.get_cell(Vector2(temp_middle, 2)) != 1:
                 self.set_cell(Vector2(temp_middle, 2), 3)
-            if self.get_cell(Vector2(temp_middle + 1, 2)) == 0:
+            if self.get_cell(Vector2(temp_middle + 1, 2)) != 1:
                 self.set_cell(Vector2(temp_middle + 1, 2), 3)
         elif cardinal == "S":
             self.doors["S"] = adjacent_room
@@ -227,11 +228,11 @@ class Room(List2D):
             self.set_cell(Vector2(temp_middle, self.size.y - 2), 3)
             self.set_cell(Vector2(temp_middle + 1, self.size.y - 2), 3)
 
-            if self.get_cell(Vector2(temp_middle - 1, self.size.y - 3)) == 0:
+            if self.get_cell(Vector2(temp_middle - 1, self.size.y - 3)) != 1:
                 self.set_cell(Vector2(temp_middle - 1, self.size.y - 3), 3)
-            if self.get_cell(Vector2(temp_middle, self.size.y - 3)) == 0:
+            if self.get_cell(Vector2(temp_middle, self.size.y - 3)) != 1:
                 self.set_cell(Vector2(temp_middle, self.size.y - 3), 3)
-            if self.get_cell(Vector2(temp_middle + 1, self.size.y - 3)) == 0:
+            if self.get_cell(Vector2(temp_middle + 1, self.size.y - 3)) != 1:
                 self.set_cell(Vector2(temp_middle + 1, self.size.y - 3), 3)
 
         elif cardinal == "E":
@@ -243,11 +244,11 @@ class Room(List2D):
             self.set_cell(Vector2(self.size.x - 2, temp_middle), 3)
             self.set_cell(Vector2(self.size.x - 2, temp_middle + 1), 3)
 
-            if self.get_cell(Vector2(self.size.x - 3, temp_middle - 1)) == 0:
+            if self.get_cell(Vector2(self.size.x - 3, temp_middle - 1)) != 1:
                 self.set_cell(Vector2(self.size.x - 3, temp_middle - 1), 3)
-            if self.get_cell(Vector2(self.size.x - 3, temp_middle)) == 0:
+            if self.get_cell(Vector2(self.size.x - 3, temp_middle)) != 1:
                 self.set_cell(Vector2(self.size.x - 3, temp_middle), 3)
-            if self.get_cell(Vector2(self.size.x - 3, temp_middle + 1)) == 0:
+            if self.get_cell(Vector2(self.size.x - 3, temp_middle + 1)) != 1:
                 self.set_cell(Vector2(self.size.x - 3, temp_middle + 1), 3)
 
         elif cardinal == "W":
@@ -259,11 +260,11 @@ class Room(List2D):
             self.set_cell(Vector2(1, temp_middle), 3)
             self.set_cell(Vector2(1, temp_middle + 1), 3)
 
-            if self.get_cell(Vector2(2, temp_middle - 1)) == 0:
+            if self.get_cell(Vector2(2, temp_middle - 1)) != 1:
                 self.set_cell(Vector2(2, temp_middle - 1), 3)
-            if self.get_cell(Vector2(2, temp_middle)) == 0:
+            if self.get_cell(Vector2(2, temp_middle)) != 1:
                 self.set_cell(Vector2(2, temp_middle), 3)
-            if self.get_cell(Vector2(2, temp_middle + 1)) == 0:
+            if self.get_cell(Vector2(2, temp_middle + 1)) != 1:
                 self.set_cell(Vector2(2, temp_middle + 1), 3)
 
     def generate_walls(self):

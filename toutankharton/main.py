@@ -1,3 +1,3 @@
 from game.application import Game
 
-Game(level=1)
+Game(level=3)
