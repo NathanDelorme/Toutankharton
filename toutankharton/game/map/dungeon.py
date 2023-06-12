@@ -9,9 +9,6 @@ class Dungeon(List2D):
             for x in range(self.size.x):
                 pos = Vector2(x, y)
                 room = Room(room_size, pos)
-                room.generate_walls()
-                room.generate_monsters()
-                room.generate_items()
                 self.set_cell(pos, room)
 
         self.generate_doors_with_prim_algorithm()
@@ -25,11 +22,6 @@ class Dungeon(List2D):
         self.breadth_first_search()
         self.end_room = None
         self.set_end_room()
-
-        print(self)
-        print(self.solved_maze)
-        print("start : " + str(self.start_room.pos))
-        print("end : " + str(self.end_room.pos))
 
     def set_end_room(self):
         max_distance = 0
@@ -128,7 +120,8 @@ class Dungeon(List2D):
 
     def __str__(self):
         res = ""
-
+        res += "start : " + str(self.start_room.pos) + "\n"
+        res += "end : " + str(self.end_room.pos) + "\n"
         for y_room in range(self.size.y):
             for y in range(self.get_cell(Vector2(0, y_room)).size.y):
                 for x_room in range(self.size.x):
@@ -139,6 +132,9 @@ class Dungeon(List2D):
                         else:
                             res += str("??").center(2) + " "
                 res += "\n"
+        res += "\n"
+        res += "solved maze : \n"
+        res += str(self.solved_maze)
         return res
 
 
@@ -200,6 +196,12 @@ class Room(List2D):
                     self.set_cell(pos, 1)
 
         self.doors = dict()
+        self.monsters = []
+        self.items = []
+
+        self.generate_walls()
+        self.generate_monsters()
+        self.generate_items()
 
     def add_door(self, cardinal, adjacent_room):
         if cardinal == "N":
@@ -290,7 +292,7 @@ class Room(List2D):
             if not available_cells:
                 return
             random_cell = random.choice(available_cells)
-            self.set_cell(random_cell, 100)
+            self.monsters.append(random_cell)
 
     def generate_items(self):
         item_count = random.randint(self.size.x * self.size.y // (self.size.x + self.size.y * 4),
@@ -300,7 +302,7 @@ class Room(List2D):
             if not available_cells:
                 return
             random_cell = random.choice(available_cells)
-            self.set_cell(random_cell, 200)
+            self.items.append(random_cell)
 
     def get_all_cells_of_value(self, value):
         res = []
@@ -316,9 +318,16 @@ class Room(List2D):
         for y in range(self.size.y):
             for x in range(self.size.x):
                 pos = Vector2(x, y)
+                c = 0
                 if self.get_cell(pos) in self.values_to_display.keys():
+                    c += 1
                     res += str(self.values_to_display[self.get_cell(pos)]).center(2) + " "
                 else:
+                    c += 1
                     res += str("??").center(2) + " "
+                if c > 1:
+                    raise Exception("More than one thing in a cell")
             res += "\n"
+        res += self.monsters.__str__() + "\n"
+        res += self.items.__str__() + "\n"
         return res

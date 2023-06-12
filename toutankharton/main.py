@@ -1,3 +1,7 @@
-from game.application import Game
+import pygame
+from toutankharton.game.menu.Menu import Menu
 
-Game(level=3)
+pygame.init()
+game = Menu().start()
+pygame.quit()
+game.start(game)
