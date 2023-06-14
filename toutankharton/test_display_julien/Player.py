@@ -3,28 +3,39 @@ import pygame
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, width, height, pos_x, pos_y, color, group, player_path):
+    def __init__(self, width, height, x, y, color, group, player_path, player_hurt_path):
         super().__init__(group)
-        self.pos_x = pos_x
-        self.pos_y = pos_y
+        self.x = x
+        self.y = y
         self.image = pygame.image.load(player_path)
         self.image = pygame.transform.scale(self.image, (width, height))
         self.rect = self.image.get_rect()
-        self.rect.center = [pos_x, pos_y]
+        self.rect.topleft = (x, y)
         self.hp = 100
+        self.speed = 3
         self.state = "idle"
+        self.cooldown = 0
+        self.player_path = player_path
+        self.player_hurt_path = player_hurt_path
 
     def move(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_z]:
-            self.pos_y -= 5
+            self.y -= self.speed
         if keys[pygame.K_q]:
-            self.pos_x -= 5
+            self.x -= self.speed
         if keys[pygame.K_s]:
-            self.pos_y += 5
+            self.y += self.speed
         if keys[pygame.K_d]:
-            self.pos_x += 5
-        self.rect.center = [self.pos_x, self.pos_y]
+            self.x += self.speed
+
+    def update(self):
+        if self.cooldown == 0:
+            self.image = pygame.image.load(self.player_path)
+        else:
+            self.image = pygame.image.load(self.player_hurt_path)
+            self.cooldown -= 1
+        self.rect.topleft = (self.x, self.y)
 
     def action(self):
         """
