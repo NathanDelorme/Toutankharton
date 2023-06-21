@@ -5,9 +5,10 @@ import pickle
 from toutankharton.map import dungeon
 from toutankharton import utils
 from toutankharton.entities.player import Player
-from toutankharton.menu.Crosshair import Crosshair
+from toutankharton.menu.crosshair import Crosshair
 from toutankharton.entities.monsters import Slime
-from toutankharton.tiling import Tiling
+from toutankharton.tiling import tiling
+from toutankharton.utils import Vector2
 
 
 class Game:
@@ -29,11 +30,14 @@ class Game:
         game.screen_size = utils.Vector2(pygame.display.Info().current_w, pygame.display.Info().current_h - 100)
         game.screen = pygame.display.set_mode((game.screen_size.x, game.screen_size.y))
 
+        game.level = 2
         if game.dungeon is None:
             game.generate_dungeon()
 
-        game.tileset = Tiling.Tileset()
-        tilemap = Tiling.Tilemap(game)
+        game.tileset = tiling.Tileset()
+        game.current_room = game.dungeon.get_cell(Vector2(1, 1))
+        print(game.current_room)
+        tilemap = tiling.Tilemap(game)
         clock = pygame.time.Clock()
 
         crosshair_group = pygame.sprite.Group()
@@ -41,13 +45,12 @@ class Game:
 
         pygame.mouse.set_visible(False)
         player_group = pygame.sprite.Group()
-        player = Player(50, 50, 100, 100, (255, 255, 255), player_group, "../toutankharton/resources/images/player.png",
-                "../toutankharton/resources/images/player_hurt.png")
+        player = Player(100, 100, player_group)
         monster_group = pygame.sprite.Group()
         slime1 = Slime(300, 300, monster_group, 1)
 
         pygame.mouse.set_visible(False)
-        clock.tick(60)
+        clock.tick(2)
 
         while True:
             pygame.display.flip()
@@ -60,7 +63,13 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            previous_pos = player.rect.topleft
             player.move()
+
+            for wall in tilemap.walls_rect:
+                if player.rect.colliderect(wall):
+                    player.rect.topleft = previous_pos
+
             slime1.attack(player)
 
             monster_group.update(player)

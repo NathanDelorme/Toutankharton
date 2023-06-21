@@ -1,6 +1,8 @@
 import sys
 import os
 import pygame
+
+from toutankharton.tiling.tiling import Tilemap
 from toutankharton.utils import Vector2
 from toutankharton.game import Game
 
@@ -36,6 +38,13 @@ class Menu:
                     elif button_text == "Quitter":
                         pygame.quit()
                         sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_o:
+                        Tilemap.easter_egg = 90
+                    if event.key == pygame.K_i:
+                        Tilemap.easter_egg = 1
+
 
             self.draw()
 

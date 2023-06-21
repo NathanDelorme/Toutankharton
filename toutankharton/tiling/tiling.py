@@ -1,5 +1,6 @@
 import pygame
 
+import random
 from toutankharton.utils import Vector2
 
 default_tileset = "resources/images/tilesets/default_tileset.png"
@@ -10,6 +11,8 @@ default_tile_size = 16
 
 
 class Tilemap:
+    displayer_multiplier = 1
+    easter_egg = 0
     def __init__(self, game):
         self.game = game
 
@@ -17,19 +20,30 @@ class Tilemap:
             temp = self.game.screen_size.x // (self.game.current_room.size.x * self.game.tileset.tile_size)
         else:
             temp = self.game.screen_size.y // (self.game.current_room.size.y * self.game.tileset.tile_size)
+        Tilemap.displayer_multiplier = temp
         self.display_tile_size = self.game.tileset.tile_size * (temp - temp % 2)
 
         center_x = (self.game.screen_size.x // 2) - (self.game.current_room.size.x * self.display_tile_size // 2)
         center_y = (self.game.screen_size.y // 2) - (self.game.current_room.size.y * self.display_tile_size // 2)
 
         self.center_adjust = Vector2(center_x, center_y)
+        self.walls_rect = []
+
+        for y in range(self.game.current_room.size.y):
+            for x in range(self.game.current_room.size.x):
+                pos = Vector2(x, y)
+                cell_value = self.game.current_room.get_cell(pos)
+                if cell_value == 1:
+                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"), (self.display_tile_size, self.display_tile_size)), (self.center_adjust.x + x * self.display_tile_size, self.center_adjust.y + y * self.display_tile_size)
+                    self.walls_rect.append(pygame.Rect(image[1], (self.display_tile_size, self.display_tile_size)))
+
 
     def draw(self):
         for y in range(self.game.current_room.size.y):
             for x in range(self.game.current_room.size.x):
                 pos = Vector2(x, y)
                 cell_value = self.game.current_room.get_cell(pos)
-                self.game.screen.blit(pygame.transform.scale(self.get_tile_from_value(pos),
+                self.game.screen.blit(pygame.transform.scale(pygame.transform.rotate(self.get_tile_from_value(pos), random.randint(0, 360) * self.easter_egg),
                                                              (self.display_tile_size, self.display_tile_size)), (
                                       self.center_adjust.x + x * self.display_tile_size,
                                       self.center_adjust.y + y * self.display_tile_size))
@@ -55,7 +69,47 @@ class Tilemap:
                 return pygame.transform.rotate(self.game.tileset.get_tile("wall_north"), 270)
             elif pos.y == self.game.current_room.size.y - 1:
                 return pygame.transform.rotate(self.game.tileset.get_tile("wall_north"), 180)
-            return self.game.tileset.get_tile("wall_north")
+            elif pos.y == 0:
+                return self.game.tileset.get_tile("wall_north")
+            else :
+                count_neighbour = 0
+                if self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1:
+                    count_neighbour += 1
+                if self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1:
+                    count_neighbour += 1
+                if self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                    count_neighbour += 1
+                if self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                    count_neighbour += 1
+
+                if count_neighbour == 0:
+                    return self.game.tileset.get_tile("rock")
+                elif count_neighbour == 1:
+                    if self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north"), 180)
+                    elif self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north"), 270)
+                    elif self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north"), 90)
+                    return self.game.tileset.get_tile("bloc_north")
+                elif count_neighbour == 2:
+                    if self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1:
+                        return self.game.tileset.get_tile("bloc_north_south")
+                    elif self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north_south"), 90)
+                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 180)
+                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 90)
+                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                        return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 270)
+                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                        return self.game.tileset.get_tile("bloc_south_east")
+                elif count_neighbour == 3:
+                    return self.game.tileset.get_tile("corner_wall_north_west")
+                elif count_neighbour == 4:
+                    return self.game.tileset.get_tile("bloc_all")
+            return self.game.tileset.get_tile("rock")
         elif value == 2:
             if pos.x == 0:
                 return pygame.transform.rotate(self.game.tileset.get_tile("opened_door_north"), 90)

@@ -1,41 +1,51 @@
+import random
+
 import pygame
+
+from toutankharton.tiling.tiling import Tilemap
 
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, width, height, x, y, color, group, player_path, player_hurt_path):
+    def __init__(self, x, y, group):
         super().__init__(group)
         self.x = x
         self.y = y
-        self.image = pygame.image.load(player_path)
-        self.image = pygame.transform.scale(self.image, (width, height))
+
+        self.image_base = pygame.image.load("../toutankharton/resources/images/player.png")
+        self.image_base = pygame.transform.scale(self.image_base, (self.image_base.get_width() * Tilemap.displayer_multiplier, self.image_base.get_height() * Tilemap.displayer_multiplier))
+
+        self.image_hurt = pygame.image.load("../toutankharton/resources/images/player_hurt.png")
+        self.image_hurt = pygame.transform.scale(self.image_hurt, (self.image_hurt.get_width() * Tilemap.displayer_multiplier, self.image_hurt.get_height() * Tilemap.displayer_multiplier))
+
+        self.image = self.image_base
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
+
         self.hp = 100
-        self.speed = 3
-        self.state = "idle"
+        self.speed = 1
         self.cooldown = 0
-        self.player_path = player_path
-        self.player_hurt_path = player_hurt_path
 
     def move(self):
         keys = pygame.key.get_pressed()
+        y = 0
+        x = 0
         if keys[pygame.K_z]:
-            self.y -= self.speed
+            y -= self.speed
         if keys[pygame.K_q]:
-            self.x -= self.speed
+            x -= self.speed
         if keys[pygame.K_s]:
-            self.y += self.speed
+            y += self.speed
         if keys[pygame.K_d]:
-            self.x += self.speed
+            x += self.speed
+        self.rect.move_ip(x, y)
 
     def update(self):
         if self.cooldown == 0:
-            self.image = pygame.image.load(self.player_path)
+            self.image = self.image_base
         else:
-            self.image = pygame.image.load(self.player_hurt_path)
+            self.image = self.image_hurt
             self.cooldown -= 1
-        self.rect.topleft = (self.x, self.y)
+        self.image = pygame.transform.rotate(self.image, random.randint(0, 360) * Tilemap.easter_egg)
 
     def action(self):
         """
