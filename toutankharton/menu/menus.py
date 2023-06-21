@@ -1,10 +1,8 @@
 import sys
 import os
 import pygame
-
-from toutankharton.game.application import Game
-from toutankharton.game.map.utils import Vector2
-
+from toutankharton.utils import Vector2
+from toutankharton.game import Game
 
 class Menu:
     def __init__(self):
@@ -12,7 +10,7 @@ class Menu:
         self.screen = pygame.display.set_mode((self.screen_size.x, self.screen_size.y))
         self.buttons = []
         self.buttons.append(Button("Nouvelle partie", Vector2(10, 10), Vector2(340, 100), (255, 255, 255)))
-        if(not os.path.isfile("savegame.dat")):
+        if not os.path.isfile("resources/save/savegame.dat"):
             self.buttons.append(Button("Continuer", Vector2(10, 120), Vector2(340, 100), (150, 150, 150)))
         else :
             self.buttons.append(Button("Continuer", Vector2(10, 120), Vector2(340, 100), (255, 255, 255)))

@@ -1,5 +1,12 @@
-from toutankharton.game.map.utils import Vector2, List2D
 import random
+from enum import Enum
+from toutankharton.utils import Vector2, List2D
+
+
+class Room_Type(Enum):
+    ROOM = 1
+    START_ROOM = 2
+    END_ROOM = 3
 
 
 class Dungeon(List2D):
@@ -22,6 +29,12 @@ class Dungeon(List2D):
         self.breadth_first_search()
         self.end_room = None
         self.set_end_room()
+
+        for y in range(self.size.y):
+            for x in range(self.size.x):
+                pos = Vector2(x, y)
+                if pos != self.start_room.pos and pos != self.end_room.pos:
+                    self.get_cell(pos).generate_room(Room_Type.ROOM)
 
     def set_end_room(self):
         max_distance = 0
@@ -199,9 +212,15 @@ class Room(List2D):
         self.monsters = []
         self.items = []
 
-        self.generate_walls()
-        self.generate_monsters()
-        self.generate_items()
+    def generate_room(self, room_type):
+        if room_type == Room_Type.ROOM:
+            self.generate_walls()
+            self.generate_monsters()
+            self.generate_items()
+
+        for key in self.doors.keys():
+            self.add_door(key, self.doors[key])
+
 
     def add_door(self, cardinal, adjacent_room):
         if cardinal == "N":
@@ -281,8 +300,11 @@ class Room(List2D):
                 for x in range(pattern.size.x):
                     pattern_pos = Vector2(x, y)
                     pos = Vector2(random_x + x, random_y + y)
-                    if pattern.get_cell(pattern_pos) != -1:
-                        self.set_cell(pos, pattern.get_cell(pattern_pos))
+
+                    if (self.get_cell(pos) == 3 and pattern.get_cell(pattern_pos) == 0) or pattern.get_cell(pattern_pos) == -1:
+                        continue
+
+                    self.set_cell(pos, pattern.get_cell(pattern_pos))
 
     def generate_monsters(self):
         monster_count = random.randint(self.size.x * self.size.y // (self.size.x + self.size.y),

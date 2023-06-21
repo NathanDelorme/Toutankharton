@@ -1,5 +1,6 @@
 import pygame
-from Entity import Entity
+
+from toutankharton.entities.entity import Entity
 
 
 class Monster(Entity):
@@ -30,4 +31,4 @@ class Monster(Entity):
 
 class Slime(Monster):
     def __init__(self, x, y, group, mul):
-        super(Slime, self).__init__(x, y, group, "../assets/images/king_slime.png", 50, 50, 20*mul, 1, 1, 5*mul, True)
+        super(Slime, self).__init__(x, y, group, "../toutankharton/resources/images/king_slime.png", 50, 50, 20 * mul, 1, 1, 5 * mul, True)

@@ -1,7 +1,8 @@
 import pygame
-from toutankharton.game.menu.Menu import Menu
+from menu import menus
+from game import Game
 
-pygame.init()
-game = Menu().start()
-pygame.quit()
-game.start(game)
+#pygame.init()
+#player_game = menus.Menu().start()
+#pygame.quit()
+Game.start(Game())
