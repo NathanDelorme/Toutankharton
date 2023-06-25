@@ -15,33 +15,13 @@ class Game:
         utils.DisplayerCalculator.computeFactor(self.screen.get_size())
         self.tileset = map.Tileset()
         self.clock = pygame.time.Clock()
-        self.level = 15
+        self.level = 1
         self.current_room = None
         self.dungeon = None
 
         self.delta_time = 1 / utils.GameInfo.frame_rate
         self.running = False
         self.player = Player(self, 0, 0)
-        #self.enemies = [characters.GreenSlime(self, 550, 550)]
-        self.items = [items.Heal(self, 100, 100), items.MaxHeal(self, 150, 150), items.Coin(self, 200, 200),
-                      items.LifeUpgrade(self, 350, 350), items.DamageUpgrade(self, 400, 400), items.AttackSpeedUpgrade(self, 450, 450),
-                      items.AttackSpeedUpgrade(self, 450, 500), items.AttackSpeedUpgrade(self, 450, 550),
-                      items.AttackSpeedUpgrade(self, 450, 600), items.AttackSpeedUpgrade(self, 450, 650),
-                      items.AttackSpeedUpgrade(self, 500, 500), items.AttackSpeedUpgrade(self, 500, 550),
-                      items.AttackSpeedUpgrade(self, 500, 600), items.AttackSpeedUpgrade(self, 500, 650),
-                      items.AttackSpeedUpgrade(self, 750, 500), items.AttackSpeedUpgrade(self, 750, 550),
-                      items.AttackSpeedUpgrade(self, 750, 600), items.AttackSpeedUpgrade(self, 750, 650),
-                      items.AttackSpeedUpgrade(self, 700, 500), items.AttackSpeedUpgrade(self, 700, 550),
-                      items.AttackSpeedUpgrade(self, 700, 600), items.AttackSpeedUpgrade(self, 500, 650),
-                      items.AttackSpeedUpgrade(self, 700, 600), items.AttackSpeedUpgrade(self, 500, 650),
-                      items.AttackSpeedUpgrade(self, 700, 600), items.AttackSpeedUpgrade(self, 500, 650),
-                      items.AttackSpeedUpgrade(self, 700, 600), items.AttackSpeedUpgrade(self, 500, 650),
-                      items.Coin(self, 300, 300), items.Coin(self, 300, 300), items.Coin(self, 300, 300),
-                      items.Coin(self, 300, 300), items.Coin(self, 300, 300), items.Coin(self, 300, 300),
-                      items.Coin(self, 300, 300), items.Coin(self, 300, 300), items.Coin(self, 300, 300),
-                      items.Coin(self, 300, 300), items.Coin(self, 300, 300), items.Coin(self, 300, 300),
-                      items.Coin(self, 300, 300), items.Coin(self, 300, 300), items.Coin(self, 300, 300),
-                      items.Coin(self, 300, 300)]
 
     def start_dungeon(self):
         if self.dungeon is None:
@@ -56,8 +36,6 @@ class Game:
         self.current_room = self.dungeon.start_room
 
     def draw(self):
-        for item in self.items:
-            item.draw(self.screen)
         for enemy in self.current_room.enemies:
             enemy.draw(self.screen)
         self.player.draw(self.screen)
@@ -66,16 +44,19 @@ class Game:
         self.player.actions()
         for enemy in self.current_room.enemies:
             enemy.actions()
-        for item in self.items:
-            item.use(self.player)
+        """for item in self.current_room.items:
+            item.use(self.player)"""
 
     def save_game(self):
         with open("save/savegame.dat", "wb") as file:
             self.player.save()
-            for enemy in self.current_room.enemies:
-                enemy.save()
-            for items in self.items:
-                items.save()
+            for y in range(self.dungeon.size.y):
+                for x in range(self.dungeon.size.x):
+                    room = self.dungeon.get_cell(utils.Vector2(x, y))
+                    for enemy in room.enemies:
+                        enemy.save()
+                    """for item in room.items:
+                        item.save()"""
             self.tileset = None
             self.screen = None
             self.clock = None
@@ -92,8 +73,11 @@ class Game:
             game.tileset = map.Tileset()
             game.clock = pygame.time.Clock()
             game.player.load()
-            for item in game.items:
-                item.load()
-            for enemy in game.enemies:
-                enemy.load()
+            for y in range(game.dungeon.size.y):
+                for x in range(game.dungeon.size.x):
+                    room = game.dungeon.get_cell(utils.Vector2(x, y))
+                    for enemy in room.enemies:
+                        enemy.load()
+                    """for item in room.items:
+                        item.load()"""
             return game

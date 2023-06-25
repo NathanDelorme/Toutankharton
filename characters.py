@@ -99,11 +99,11 @@ class Player(Character):
             if bullet.rect.x < 0 or bullet.rect.x > self.game.screen.get_width() or bullet.rect.y < 0 or bullet.rect.y > self.game.screen.get_height():
                 self.bullets.remove(bullet)
 
-            for enemy in self.game.enemies:
+            for enemy in self.game.current_room.enemies:
                 if bullet.rect.colliderect(enemy.rect):
                     enemy.hp -= self.strength
                     if enemy.hp <= 0:
-                        self.game.enemies.remove(enemy)
+                        self.game.current_room.enemies.remove(enemy)
                     self.bullets.remove(bullet)
 
         if keys[pygame.K_SPACE]:

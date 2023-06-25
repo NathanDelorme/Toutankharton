@@ -7,9 +7,9 @@ from utils import List2D, Vector2
 import pygame
 
 
-
 class Tilemap:
     easter_egg = 0
+
     def __init__(self, game):
         self.game = game
 
@@ -460,8 +460,7 @@ class Room(List2D):
                     self.set_cell(pos, pattern.get_cell(pattern_pos))
 
     def generate_monsters(self):
-        monster_count = random.randint(self.size.x * self.size.y // (self.size.x + self.size.y),
-                                       self.size.x * self.size.y // (self.size.x + self.size.y // 4))
+        monster_count = random.randint(1, 3)
         monster_cells = []
         for i in range(monster_count):
             available_cells = self.get_all_cells_of_value(0)
