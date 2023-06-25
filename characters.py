@@ -74,7 +74,7 @@ class Player(Character):
         super().__init__(game, utils.Resources.characters["player"],
                          x, y,
                          self.stats["max_hp"], self.stats["speed"], self.stats["strength"], self.stats["attack_speed"])
-        self.coins = 0
+        self.coins = 200
         self.level = 1
         self.exp = 0
         self.equipment = []
@@ -104,9 +104,10 @@ class Player(Character):
             for enemy in self.game.current_room.enemies:
                 if bullet.rect.colliderect(enemy.rect):
                     if enemy.is_boss:
-                        if enemy.hp >= 25 and enemy.hp - self.strength < 25:
-                            #TODO : Boss fight
-                            pass
+                        if enemy.hp >= 35 and enemy.hp - self.strength < 35:
+                            enemy.phase(1)
+                        if enemy.hp >= 15 and enemy.hp - self.strength < 15:
+                            enemy.phase(2)
                     enemy.hp -= self.strength
 
                     if enemy.hp <= 0:
@@ -162,7 +163,7 @@ class Enemy(Character):
         pass
 
 
-class Slime(Character):
+class Slime(Enemy):
     def __init__(self, game, image, x, y, max_hp, speed, strength, attack_speed):
         super().__init__(game, image, x, y, max_hp, speed, strength, attack_speed)
 
@@ -267,8 +268,8 @@ class RedSlime(Slime):
 class KingSlime(Slime):
     stats = {
         "max_hp": 50,
-        "speed": 50,
-        "strength": 0,
+        "speed": 75,
+        "strength": 1,
         "attack_speed": 3
     }
 
@@ -306,3 +307,14 @@ class KingSlime(Slime):
             utils.DisplayerCalculator.adjust_center[0] + pos.x * disp_size,
             utils.DisplayerCalculator.adjust_center[1] + pos.y * disp_size)
         self.game.doors_rect.append((pygame.Rect(image[1], (disp_size, disp_size)), pos))
+
+    def phase(self, value):
+        match value:
+            case 1:
+                self.strength = 2
+                self.speed = 100
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))
+            case 2:
+                self.speed = 125
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))

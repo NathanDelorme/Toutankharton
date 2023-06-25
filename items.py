@@ -129,6 +129,7 @@ class DamageUpgrade(Item):
         self.image = utils.Resources.items["attack_damage_upgrade"]
         super().load()
 
+
 class AttackSpeedUpgrade(Item):
     def __init__(self, game, x, y):
         super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y)
@@ -140,6 +141,78 @@ class AttackSpeedUpgrade(Item):
             else:
                 target.attack_speed = 0.1
             super().use(target)
+
+    def load(self):
+        self.image = utils.Resources.items["attack_speed_upgrade"]
+        super().load()
+
+
+class Buyable(Item):
+
+    def __init__(self, game, image, x, y, price):
+        super().__init__(game, image, x, y)
+        self.price = price
+
+    def use(self, target):
+        if self.game.player.coins >= self.price:
+            self.game.player.coins -= self.price
+            super().use(target)
+            return True
+        return False
+
+
+class LifeUpgradeShop(Buyable):
+    def __init__(self, game, x, y):
+        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+
+    def use(self, target):
+
+        if self.rect.colliderect(target.rect) and super().use(target):
+            target.max_hp += 1
+
+    def load(self):
+        self.image = utils.Resources.items["attack_speed_upgrade"]
+        super().load()
+
+class DamageUpgradeShop(Buyable):
+    def __init__(self, game, x, y):
+        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+
+    def use(self, target):
+
+        if self.rect.colliderect(target.rect) and super().use(target):
+            target.strength += 0.5
+
+    def load(self):
+        self.image = utils.Resources.items["attack_speed_upgrade"]
+        super().load()
+
+
+class AttackSpeedUpgradeShop(Buyable):
+    def __init__(self, game, x, y):
+        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+
+    def use(self, target):
+
+        if self.rect.colliderect(target.rect) and super().use(target):
+            if target.attack_speed > 0.1:
+                target.attack_speed -= 0.1 * math.log(target.attack_speed + 1)
+            else:
+                target.attack_speed = 0.1
+
+    def load(self):
+        self.image = utils.Resources.items["attack_speed_upgrade"]
+        super().load()
+
+
+class MaxHealShop(Buyable):
+    def __init__(self, game, x, y):
+        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+
+    def use(self, target):
+
+        if self.rect.colliderect(target.rect) and super().use(target):
+            target.hp = target.max_hp
 
     def load(self):
         self.image = utils.Resources.items["attack_speed_upgrade"]

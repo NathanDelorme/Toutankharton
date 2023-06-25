@@ -405,7 +405,7 @@ class Room(List2D):
             self.add_door(key, self.doors[key])
 
     def generate_start_room(self):
-        pass
+        self.items.append(items.AttackSpeedUpgradeShop(self.game, 800, 600))
 
     def generate_end_room(self):
         self.enemies.append(characters.KingSlime(self.game, self.game.screen.get_width() // 2, self.game.screen.get_height() // 2))

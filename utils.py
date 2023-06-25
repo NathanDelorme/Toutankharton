@@ -50,6 +50,7 @@ class Resources:
     items = {
         "heal": pygame.image.load("assets/items/heal.png"),
         "max_heal": pygame.image.load("assets/items/max_heal.png"),
+        "max_heal_shop": pygame.image.load("assets/items/max_heal_shop.png"),
         "coin": pygame.image.load("assets/items/coin.png"),
         "attack_damage_upgrade": pygame.image.load("assets/items/damage_upgrade.png"),
         "attack_speed_upgrade": pygame.image.load("assets/items/attack_speed_upgrade.png"),
