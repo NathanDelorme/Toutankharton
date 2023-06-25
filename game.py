@@ -9,6 +9,8 @@ import map
 
 
 class Game:
+    best_score = 0
+
     def __init__(self):
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         #self.screen = pygame.display.set_mode((720, 480))
@@ -62,6 +64,10 @@ class Game:
             self.tileset = None
             self.screen = None
             self.clock = None
+            self.best_score = Game.best_score
+            score_file = open("save/score.dat", "w")
+            score_file.write(str(Game.best_score))
+            score_file.close()
             pickle.dump(self, file, pickle.HIGHEST_PROTOCOL)
 
     @staticmethod

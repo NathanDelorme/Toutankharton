@@ -20,7 +20,7 @@ class Resources:
         "default": (pygame.image.load("assets/tilesets/default_tileset.png"),
                     ["opened_door_north", "closed_door_north", "wall_north", "corner_wall_north_west",
                      "rock", "bloc", "bloc_north", "bloc_north_south",
-                     "bloc_south_east", "bloc_north_south_east", "bloc_all", "floor"],
+                     "bloc_south_east", "bloc_north_south_east", "bloc_all", "floor", "hole"],
                     16)
     }
     fonts = {

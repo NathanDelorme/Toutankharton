@@ -26,20 +26,34 @@ class Tilemap:
                 pos = Vector2(x, y)
                 cell_value = self.game.current_room.get_cell(pos)
                 if cell_value == 1:
-                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"), (self.display_tile_size, self.display_tile_size)), (self.center_adjust.x + x * self.display_tile_size, self.center_adjust.y + y * self.display_tile_size)
+                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"),
+                                                   (self.display_tile_size, self.display_tile_size)), (
+                    self.center_adjust.x + x * self.display_tile_size,
+                    self.center_adjust.y + y * self.display_tile_size)
                     game.walls_rect.append(pygame.Rect(image[1], (self.display_tile_size, self.display_tile_size)))
                 if cell_value == 2:
-                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"), (self.display_tile_size, self.display_tile_size)), (self.center_adjust.x + x * self.display_tile_size, self.center_adjust.y + y * self.display_tile_size)
-                    game.doors_rect.append((pygame.Rect(image[1], (self.display_tile_size, self.display_tile_size)), pos))
-
+                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"),
+                                                   (self.display_tile_size, self.display_tile_size)), (
+                    self.center_adjust.x + x * self.display_tile_size,
+                    self.center_adjust.y + y * self.display_tile_size)
+                    game.doors_rect.append(
+                        (pygame.Rect(image[1], (self.display_tile_size, self.display_tile_size)), pos))
+                if cell_value == 4:
+                    image = pygame.transform.scale(self.game.tileset.get_tile("rock"),
+                                                   (self.display_tile_size, self.display_tile_size)), (
+                    self.center_adjust.x + x * self.display_tile_size,
+                    self.center_adjust.y + y * self.display_tile_size)
+                    game.doors_rect.append(
+                        (pygame.Rect(image[1], (self.display_tile_size, self.display_tile_size)), pos))
 
     def draw(self):
         for y in range(self.game.current_room.size.y):
             for x in range(self.game.current_room.size.x):
                 pos = Vector2(x, y)
                 cell_value = self.game.current_room.get_cell(pos)
-                self.game.screen.blit(pygame.transform.scale(pygame.transform.rotate(self.get_tile_from_value(pos), random.randint(0, 360) * self.easter_egg),
-                                                             (self.display_tile_size, self.display_tile_size)), (
+                self.game.screen.blit(pygame.transform.scale(
+                    pygame.transform.rotate(self.get_tile_from_value(pos), random.randint(0, 360) * self.easter_egg),
+                    (self.display_tile_size, self.display_tile_size)), (
                                           self.center_adjust.x + x * self.display_tile_size,
                                           self.center_adjust.y + y * self.display_tile_size))
 
@@ -49,6 +63,8 @@ class Tilemap:
             return self.game.tileset.get_tile("floor")
         elif value == 3:
             return self.game.tileset.get_tile("floor")
+        elif value == 4:
+            return self.game.tileset.get_tile("hole")
         elif value == 1:
             if pos.x == 0 and pos.y == 0:
                 return self.game.tileset.get_tile("corner_wall_north_west")
@@ -66,7 +82,7 @@ class Tilemap:
                 return pygame.transform.rotate(self.game.tileset.get_tile("wall_north"), 180)
             elif pos.y == 0:
                 return self.game.tileset.get_tile("wall_north")
-            else :
+            else:
                 count_neighbour = 0
                 if self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1:
                     count_neighbour += 1
@@ -88,17 +104,29 @@ class Tilemap:
                         return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north"), 90)
                     return self.game.tileset.get_tile("bloc_north")
                 elif count_neighbour == 2:
-                    if self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1:
+                    if self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y + 1)) == 1:
                         return self.game.tileset.get_tile("bloc_north_south")
-                    elif self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                    elif self.game.current_room.get_cell(
+                            Vector2(pos.x - 1, pos.y)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x + 1, pos.y)) == 1:
                         return pygame.transform.rotate(self.game.tileset.get_tile("bloc_north_south"), 90)
-                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                    elif self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x - 1, pos.y)) == 1:
                         return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 180)
-                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                    elif self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y - 1)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x + 1, pos.y)) == 1:
                         return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 90)
-                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x - 1, pos.y)) == 1:
+                    elif self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x - 1, pos.y)) == 1:
                         return pygame.transform.rotate(self.game.tileset.get_tile("bloc_south_east"), 270)
-                    elif self.game.current_room.get_cell(Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(Vector2(pos.x + 1, pos.y)) == 1:
+                    elif self.game.current_room.get_cell(
+                            Vector2(pos.x, pos.y + 1)) == 1 and self.game.current_room.get_cell(
+                            Vector2(pos.x + 1, pos.y)) == 1:
                         return self.game.tileset.get_tile("bloc_south_east")
                 elif count_neighbour == 3:
                     return self.game.tileset.get_tile("corner_wall_north_west")
@@ -120,7 +148,8 @@ class Tilemap:
 
 
 class Tileset:
-    def __init__(self, image=utils.Resources.tileset["default"][0], tiles_name=utils.Resources.tileset["default"][1], tile_size=utils.Resources.tileset["default"][2]):
+    def __init__(self, image=utils.Resources.tileset["default"][0], tiles_name=utils.Resources.tileset["default"][1],
+                 tile_size=utils.Resources.tileset["default"][2]):
         self.tile_size = tile_size
         self.tileset = image.convert_alpha()
         self.tiles_name = tiles_name
@@ -177,6 +206,10 @@ class Dungeon(List2D):
                 pos = Vector2(x, y)
                 if pos != self.start_room.pos and pos != self.end_room.pos:
                     self.get_cell(pos).generate_room(Room_Type.ROOM)
+                elif pos == self.start_room.pos:
+                    self.get_cell(pos).generate_room(Room_Type.START_ROOM)
+                elif pos == self.end_room.pos:
+                    self.get_cell(pos).generate_room(Room_Type.END_ROOM)
 
     def set_end_room(self):
         max_distance = 0
@@ -333,6 +366,7 @@ class Room(List2D):
         1: "██",
         2: "⌈⌉",
         3: "><",
+        4: "[]",
         100: "MM",
         200: "II"
     }
@@ -374,7 +408,7 @@ class Room(List2D):
         pass
 
     def generate_end_room(self):
-        pass
+        self.set_cell(Vector2(self.size.x // 2, self.size.y // 2), 4)
 
     def add_door(self, cardinal, adjacent_room):
         if cardinal == "N":
@@ -455,7 +489,8 @@ class Room(List2D):
                     pattern_pos = Vector2(x, y)
                     pos = Vector2(random_x + x, random_y + y)
 
-                    if (self.get_cell(pos) == 3 and pattern.get_cell(pattern_pos) == 0) or pattern.get_cell(pattern_pos) == -1:
+                    if (self.get_cell(pos) == 3 and pattern.get_cell(pattern_pos) == 0) or pattern.get_cell(
+                            pattern_pos) == -1:
                         continue
 
                     self.set_cell(pos, pattern.get_cell(pattern_pos))
@@ -473,14 +508,23 @@ class Room(List2D):
         for cell in monster_cells:
             random.randint(0, 100)
             if random.randint(0, 100) < 50:
-                self.enemies.append(characters.GreenSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 12 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 10 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.GreenSlime(self.game, utils.DisplayerCalculator.adjust_center[
+                    0] + utils.DisplayerCalculator.factor * 12 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                                          utils.DisplayerCalculator.adjust_center[
+                                                              1] + utils.DisplayerCalculator.factor * 10 + cell.y * 16 * utils.DisplayerCalculator.factor))
             elif random.randint(0, 100) < 85:
-                self.enemies.append(characters.OrangeSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 14 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 12 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.OrangeSlime(self.game, utils.DisplayerCalculator.adjust_center[
+                    0] + utils.DisplayerCalculator.factor * 14 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                                           utils.DisplayerCalculator.adjust_center[
+                                                               1] + utils.DisplayerCalculator.factor * 12 + cell.y * 16 * utils.DisplayerCalculator.factor))
             else:
-                self.enemies.append(characters.RedSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 15 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 14 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.RedSlime(self.game, utils.DisplayerCalculator.adjust_center[
+                    0] + utils.DisplayerCalculator.factor * 15 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                                        utils.DisplayerCalculator.adjust_center[
+                                                            1] + utils.DisplayerCalculator.factor * 14 + cell.y * 16 * utils.DisplayerCalculator.factor))
 
     def generate_items(self):
-        item_count = random.randint(4, 6)
+        item_count = random.randint(4, 8)
         items_cells = []
         for i in range(item_count):
             available_cells = self.get_all_cells_of_value(0)
@@ -491,13 +535,22 @@ class Room(List2D):
 
         for cell in items_cells:
             random.randint(0, 100)
-            if random.randint(0, 100) < 60:
-                for i in range(random.randint(1, 5)):
-                    self.items.append(items.Coin(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
-            elif random.randint(0, 100) < 90:
-                self.items.append(items.Heal(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
+            if random.randint(0, 100) < 85:
+                for i in range(random.randint(1, 3)):
+                    self.items.append(items.Coin(self.game, utils.DisplayerCalculator.adjust_center[
+                        0] + utils.DisplayerCalculator.factor * 6 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                                 utils.DisplayerCalculator.adjust_center[
+                                                     1] + utils.DisplayerCalculator.factor * 6 + cell.y * 16 * utils.DisplayerCalculator.factor))
+            elif random.randint(0, 100) < 95:
+                self.items.append(items.Heal(self.game, utils.DisplayerCalculator.adjust_center[
+                    0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                             utils.DisplayerCalculator.adjust_center[
+                                                 1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
             else:
-                self.items.append(items.MaxHeal(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.items.append(items.MaxHeal(self.game, utils.DisplayerCalculator.adjust_center[
+                    0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                                                utils.DisplayerCalculator.adjust_center[
+                                                    1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
 
     def get_all_cells_of_value(self, value):
         res = []

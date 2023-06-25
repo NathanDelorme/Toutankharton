@@ -4,6 +4,7 @@ import sys
 import pygame
 import pygame_gui
 import utils
+from game import Game
 
 
 class Crosshair(pygame.sprite.Sprite):
@@ -69,6 +70,12 @@ def display_hud(game):
                                                         attack_speed_text.get_height() * utils.DisplayerCalculator.factor))
     game.screen.blit(attack_speed_text, (game.screen.get_width() - attack_speed_text.get_width() - 5 - attack_speed_image.get_width() - 5, 5 + heart_image.get_height() + 5 + coin_image.get_height() + 5 + attack_damage_image.get_height()))
 
+    level_text = utils.Resources.fonts["default"].render("Niveau " + str(game.level), True, (255, 255, 255))
+    level_text = pygame.transform.scale(level_text,
+                                        (level_text.get_width() * utils.DisplayerCalculator.factor,
+                                            level_text.get_height() * utils.DisplayerCalculator.factor))
+    game.screen.blit(level_text, (5, 5))
+
     quit_text = utils.Resources.fonts["default"].render("Escape pour sauvegarder et quitter", True, (255, 255, 255))
     quit_text = pygame.transform.scale(quit_text,
                                        (quit_text.get_width() * utils.DisplayerCalculator.factor//2,
@@ -87,7 +94,7 @@ def launch_main_menu():
                                              manager=ui_manager)
     best_score_text = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((screen.get_width() // 4, screen.get_height() // 11 * 1),
                                                                             (screen.get_width() // 2, screen.get_height() // 11)),
-                                                  text="Meilleur score: ",
+                                                  text="Meilleur score: " + str(Game.best_score),
                                                   manager=ui_manager)
     new_game_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((screen.get_width() // 4, screen.get_height() // 11 * 3),
                                                                              (screen.get_width() // 2, screen.get_height() // 11)),

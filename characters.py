@@ -1,4 +1,5 @@
 import math
+import random
 import time
 
 import pygame
@@ -63,7 +64,7 @@ class Character(pygame.sprite.Sprite):
 
 class Player(Character):
     stats = {
-        "max_hp": 3,
+        "max_hp": 5,
         "speed": 400,
         "strength": 1,
         "attack_speed": 0.5
@@ -103,6 +104,7 @@ class Player(Character):
                 if bullet.rect.colliderect(enemy.rect):
                     enemy.hp -= self.strength
                     if enemy.hp <= 0:
+                        enemy.get_loot(self)
                         self.game.current_room.enemies.remove(enemy)
                     if bullet in self.bullets:
                         self.bullets.remove(bullet)
@@ -148,6 +150,9 @@ class Enemy(Character):
     def setTarget(target):
         Enemy.target = target
 
+    def get_loot(self, player):
+        pass
+
 
 class Slime(Character):
     def __init__(self, game, image, x, y, max_hp, speed, strength, attack_speed):
@@ -173,9 +178,9 @@ class Slime(Character):
 class GreenSlime(Slime):
     stats = {
         "max_hp": 3,
-        "speed": 250,
+        "speed": 200,
         "strength": 1,
-        "attack_speed": 10
+        "attack_speed": 1
     }
 
     def __init__(self, game, x, y):
@@ -194,10 +199,13 @@ class GreenSlime(Slime):
     def save(self):
         super().save()
 
+    def get_loot(self, player):
+        player.coins += random.randint(1, 3)
+
 class OrangeSlime(Slime):
     stats = {
         "max_hp": 5,
-        "speed": 200,
+        "speed": 175,
         "strength": 2,
         "attack_speed": 2
     }
@@ -217,6 +225,9 @@ class OrangeSlime(Slime):
 
     def save(self):
         super().save()
+
+    def get_loot(self, player):
+        player.coins += random.randint(2, 5)
 
 class RedSlime(Slime):
     stats = {
@@ -241,3 +252,6 @@ class RedSlime(Slime):
 
     def save(self):
         super().save()
+
+    def get_loot(self, player):
+        player.coins += random.randint(3, 8)
