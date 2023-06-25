@@ -507,20 +507,19 @@ class Room(List2D):
         for cell in monster_cells:
             rnd = random.randint(0, 100)
             if rnd < 50:
-                self.enemies.append(characters.GreenSlime(self.game, utils.DisplayerCalculator.adjust_center[
-                    0] + utils.DisplayerCalculator.factor * 12 + cell.x * 16 * utils.DisplayerCalculator.factor,
-                                                          utils.DisplayerCalculator.adjust_center[
-                                                              1] + utils.DisplayerCalculator.factor * 10 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.GreenSlime(self.game,
+                    utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 2 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                    utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 3 + cell.y * 16 * utils.DisplayerCalculator.factor))
             elif rnd < 85:
                 self.enemies.append(characters.OrangeSlime(self.game, utils.DisplayerCalculator.adjust_center[
-                    0] + utils.DisplayerCalculator.factor * 14 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                    0] + utils.DisplayerCalculator.factor * 1 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                            utils.DisplayerCalculator.adjust_center[
-                                                               1] + utils.DisplayerCalculator.factor * 12 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                                                               1] + utils.DisplayerCalculator.factor * 2 + cell.y * 16 * utils.DisplayerCalculator.factor))
             else:
                 self.enemies.append(characters.RedSlime(self.game, utils.DisplayerCalculator.adjust_center[
-                    0] + utils.DisplayerCalculator.factor * 15 + cell.x * 16 * utils.DisplayerCalculator.factor,
+                    0] + utils.DisplayerCalculator.factor * 0.5 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                         utils.DisplayerCalculator.adjust_center[
-                                                            1] + utils.DisplayerCalculator.factor * 14 + cell.y * 16 * utils.DisplayerCalculator.factor))
+                                                            1] + utils.DisplayerCalculator.factor * 1 + cell.y * 16 * utils.DisplayerCalculator.factor))
 
     def generate_items(self):
         item_count = random.randint(4, 8)

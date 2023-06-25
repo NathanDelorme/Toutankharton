@@ -45,7 +45,9 @@ def launch_game():
         if game.running:
             game.screen.fill("black")
             tilemap.draw()
-            previous_pos = game.player.rect.topleft
+            previous_pos_list = [game.player.rect.topleft]
+            for enemy in game.current_room.enemies:
+                previous_pos_list.append(enemy.rect.topleft)
 
             accumulator += game.clock.tick() / 1000
             while accumulator >= game.delta_time:
@@ -53,8 +55,14 @@ def launch_game():
                 accumulator -= game.delta_time
 
             for wall in game.walls_rect:
+                i = 0
                 if game.player.rect.colliderect(wall):
-                    game.player.rect.topleft = previous_pos
+                    game.player.rect.topleft = previous_pos_list[i]
+                for enemy in game.current_room.enemies:
+                    i += 1
+                    if enemy.rect.colliderect(wall):
+                        enemy.rect.topleft = previous_pos_list[i]
+
             for door in game.doors_rect:
                 if game.player.rect.colliderect(door[0]):
                     if door[1].x == game.current_room.size.x // 2 and door[1].y == 0:
