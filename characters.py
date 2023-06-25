@@ -104,7 +104,8 @@ class Player(Character):
                     enemy.hp -= self.strength
                     if enemy.hp <= 0:
                         self.game.current_room.enemies.remove(enemy)
-                    self.bullets.remove(bullet)
+                    if bullet in self.bullets:
+                        self.bullets.remove(bullet)
 
         if keys[pygame.K_SPACE]:
             self.attack()

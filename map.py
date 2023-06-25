@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 import characters
+import items
 import utils
 from utils import List2D, Vector2
 import pygame
@@ -472,21 +473,31 @@ class Room(List2D):
         for cell in monster_cells:
             random.randint(0, 100)
             if random.randint(0, 100) < 50:
-                self.enemies.append(characters.GreenSlime(self.game, cell.x * 16 * utils.DisplayerCalculator.factor, cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.GreenSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 12 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 10 + cell.y * 16 * utils.DisplayerCalculator.factor))
             elif random.randint(0, 100) < 85:
-                self.enemies.append(characters.OrangeSlime(self.game, cell.x * 16 * utils.DisplayerCalculator.factor, cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.OrangeSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 14 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 12 + cell.y * 16 * utils.DisplayerCalculator.factor))
             else:
-                self.enemies.append(characters.RedSlime(self.game, cell.x * 16 * utils.DisplayerCalculator.factor, cell.y * 16 * utils.DisplayerCalculator.factor))
+                self.enemies.append(characters.RedSlime(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 15 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 14 + cell.y * 16 * utils.DisplayerCalculator.factor))
 
     def generate_items(self):
-        item_count = random.randint(self.size.x * self.size.y // (self.size.x + self.size.y * 4),
-                                    self.size.x * self.size.y // (self.size.x + self.size.y * 2))
+        item_count = random.randint(4, 6)
+        items_cells = []
         for i in range(item_count):
             available_cells = self.get_all_cells_of_value(0)
             if not available_cells:
                 return
             random_cell = random.choice(available_cells)
-            self.items.append(random_cell)
+            items_cells.append(random_cell)
+
+        for cell in items_cells:
+            random.randint(0, 100)
+            if random.randint(0, 100) < 60:
+                for i in range(random.randint(1, 5)):
+                    self.items.append(items.Coin(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
+            elif random.randint(0, 100) < 90:
+                self.items.append(items.Heal(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
+            else:
+                self.items.append(items.MaxHeal(self.game, utils.DisplayerCalculator.adjust_center[0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor, utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 4 + cell.y * 16 * utils.DisplayerCalculator.factor))
 
     def get_all_cells_of_value(self, value):
         res = []

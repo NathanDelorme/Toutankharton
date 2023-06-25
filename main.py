@@ -78,8 +78,6 @@ def launch_game():
                     os.remove("save/savegame.dat")
                 return
 
-        print(game.current_room.enemies)
-        print(game.current_room.items)
         crosshair.update()
 
         gui.display_hud(game)

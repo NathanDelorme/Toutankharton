@@ -19,7 +19,7 @@ class Item(pygame.sprite.Sprite):
 
     def use(self, target):
         self.kill()
-        self.game.items.remove(self)
+        self.game.current_room.items.remove(self)
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)

@@ -38,14 +38,16 @@ class Game:
     def draw(self):
         for enemy in self.current_room.enemies:
             enemy.draw(self.screen)
+        for item in self.current_room.items:
+            item.draw(self.screen)
         self.player.draw(self.screen)
 
     def handle_events(self):
         self.player.actions()
         for enemy in self.current_room.enemies:
             enemy.actions()
-        """for item in self.current_room.items:
-            item.use(self.player)"""
+        for item in self.current_room.items:
+            item.use(self.player)
 
     def save_game(self):
         with open("save/savegame.dat", "wb") as file:
@@ -55,8 +57,8 @@ class Game:
                     room = self.dungeon.get_cell(utils.Vector2(x, y))
                     for enemy in room.enemies:
                         enemy.save()
-                    """for item in room.items:
-                        item.save()"""
+                    for item in room.items:
+                        item.save()
             self.tileset = None
             self.screen = None
             self.clock = None
@@ -78,6 +80,6 @@ class Game:
                     room = game.dungeon.get_cell(utils.Vector2(x, y))
                     for enemy in room.enemies:
                         enemy.load()
-                    """for item in room.items:
-                        item.load()"""
+                    for item in room.items:
+                        item.load()
             return game
