@@ -74,7 +74,7 @@ class Player(Character):
         super().__init__(game, utils.Resources.characters["player"],
                          x, y,
                          self.stats["max_hp"], self.stats["speed"], self.stats["strength"], self.stats["attack_speed"])
-        self.coins = 200
+        self.coins = 0
         self.level = 1
         self.exp = 0
         self.equipment = []
@@ -104,10 +104,14 @@ class Player(Character):
             for enemy in self.game.current_room.enemies:
                 if bullet.rect.colliderect(enemy.rect):
                     if enemy.is_boss:
-                        if enemy.hp >= 35 and enemy.hp - self.strength < 35:
+                        if enemy.hp > 30 and enemy.hp - self.strength <= 30:
                             enemy.phase(1)
-                        if enemy.hp >= 15 and enemy.hp - self.strength < 15:
+                        if enemy.hp > 20 and enemy.hp - self.strength <= 20:
                             enemy.phase(2)
+                        if enemy.hp > 10 and enemy.hp - self.strength <= 10:
+                            enemy.phase(3)
+                        if enemy.hp - self.strength <= 0:
+                            enemy.phase(4)
                     enemy.hp -= self.strength
 
                     if enemy.hp <= 0:
@@ -269,7 +273,7 @@ class KingSlime(Slime):
     stats = {
         "max_hp": 50,
         "speed": 75,
-        "strength": 1,
+        "strength": 2,
         "attack_speed": 3
     }
 
@@ -311,10 +315,33 @@ class KingSlime(Slime):
     def phase(self, value):
         match value:
             case 1:
-                self.strength = 2
+                self.strength = 3
                 self.speed = 100
-                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topleft[0], self.rect.topleft[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topright[0], self.rect.topright[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.bottomleft[0], self.rect.bottomleft[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.bottomright[0], self.rect.bottomright[1]))
             case 2:
                 self.speed = 125
-                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))
-                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.x, self.rect.y))
+                self.strength = 4
+                self.game.current_room.enemies.append(OrangeSlime(self.game, self.rect.centerx, self.rect.top))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topleft[0], self.rect.topleft[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topright[0], self.rect.topright[1]))
+                self.game.current_room.enemies.append(OrangeSlime(self.game, self.rect.bottomright[0], self.rect.bottomright[1]))
+                self.game.current_room.enemies.append(OrangeSlime(self.game, self.rect.bottomleft[0], self.rect.bottomleft[1]))
+            case 3:
+                self.speed = 150
+                self.strength = 5
+                self.game.current_room.enemies.append(RedSlime(self.game, self.rect.centerx, self.rect.top))
+                self.game.current_room.enemies.append(RedSlime(self.game, self.rect.centerx, self.rect.bottom))
+                self.game.current_room.enemies.append(OrangeSlime(self.game, self.rect.bottomright[0], self.rect.bottomright[1]))
+                self.game.current_room.enemies.append(OrangeSlime(self.game, self.rect.bottomleft[0], self.rect.bottomleft[1]))
+            case 4:
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.centerx, self.rect.top))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.centerx, self.rect.bottom))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.left, self.rect.centery))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.right, self.rect.centery))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topleft[0], self.rect.topleft[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.topright[0], self.rect.topright[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.bottomleft[0], self.rect.bottomleft[1]))
+                self.game.current_room.enemies.append(GreenSlime(self.game, self.rect.bottomright[0], self.rect.bottomright[1]))

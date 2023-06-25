@@ -405,7 +405,14 @@ class Room(List2D):
             self.add_door(key, self.doors[key])
 
     def generate_start_room(self):
-        self.items.append(items.AttackSpeedUpgradeShop(self.game, 800, 600))
+        self.items.append(items.AttackSpeedUpgradeShop(self.game, utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * 4) - utils.DisplayerCalculator.factor * 3,
+                                                       (utils.DisplayerCalculator.adjust_center[1] +  utils.DisplayerCalculator.factor * 16 * 4) - utils.DisplayerCalculator.factor * 3))
+        self.items.append(items.DamageUpgradeShop(self.game, utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * 4) - utils.DisplayerCalculator.factor * 3,
+                                                  utils.DisplayerCalculator.adjust_center[1] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - utils.DisplayerCalculator.factor * 3))
+        self.items.append(items.LifeUpgradeShop(self.game, utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - utils.DisplayerCalculator.factor * 3,
+                                                    utils.DisplayerCalculator.adjust_center[1] + (utils.DisplayerCalculator.factor * 16 * 4) - utils.DisplayerCalculator.factor * 3))
+        self.items.append(items.MaxHealShop(self.game, utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - utils.DisplayerCalculator.factor * 3,
+                                                    utils.DisplayerCalculator.adjust_center[1] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - utils.DisplayerCalculator.factor * 3))
 
     def generate_end_room(self):
         self.enemies.append(characters.KingSlime(self.game, self.game.screen.get_width() // 2, self.game.screen.get_height() // 2))
@@ -495,7 +502,7 @@ class Room(List2D):
                     self.set_cell(pos, pattern.get_cell(pattern_pos))
 
     def generate_monsters(self):
-        monster_count = random.randint(1, 4)
+        monster_count = random.randint(1 + self.game.level // 2, 2 + self.game.level)
         monster_cells = []
         for i in range(monster_count):
             available_cells = self.get_all_cells_of_value(0)
@@ -541,7 +548,7 @@ class Room(List2D):
                         0] + utils.DisplayerCalculator.factor * 6 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                  utils.DisplayerCalculator.adjust_center[
                                                      1] + utils.DisplayerCalculator.factor * 6 + cell.y * 16 * utils.DisplayerCalculator.factor))
-            elif rnd < 95:
+            elif rnd < 98:
                 self.items.append(items.Heal(self.game, utils.DisplayerCalculator.adjust_center[
                     0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                              utils.DisplayerCalculator.adjust_center[

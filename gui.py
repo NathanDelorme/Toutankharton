@@ -3,6 +3,8 @@ import sys
 
 import pygame
 import pygame_gui
+
+import items
 import utils
 from game import Game
 
@@ -82,9 +84,46 @@ def display_hud(game):
                                         quit_text.get_height() * utils.DisplayerCalculator.factor//2))
     game.screen.blit(quit_text, (5, game.screen.get_height() - quit_text.get_height() - 5))
 
+    if game.current_room == game.dungeon.start_room:
+        for item in game.current_room.items:
+            if isinstance(item, items.AttackSpeedUpgradeShop):
+                shop_text_attack_speed = utils.Resources.fonts["default"].render("75 coins", True, (255, 255, 255))
+                shop_text_attack_speed = pygame.transform.scale(shop_text_attack_speed,
+                                                                (shop_text_attack_speed.get_width() * utils.DisplayerCalculator.factor//2,
+                                                                    shop_text_attack_speed.get_height() * utils.DisplayerCalculator.factor//2))
+                game.screen.blit(shop_text_attack_speed, (utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * 4) - shop_text_attack_speed.get_width()//2,
+                                                          (utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 16 * 3.8) - shop_text_attack_speed.get_height()))
+            if isinstance(item, items.DamageUpgradeShop):
+                shop_text_attack_damage = utils.Resources.fonts["default"].render("75 coins", True, (255, 255, 255))
+                shop_text_attack_damage = pygame.transform.scale(shop_text_attack_damage,
+                                                                (shop_text_attack_damage.get_width() * utils.DisplayerCalculator.factor//2,
+                                                                 shop_text_attack_damage.get_height() * utils.DisplayerCalculator.factor//2))
+                game.screen.blit(shop_text_attack_damage, (utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * 4) - shop_text_attack_damage.get_width()//2,
+                                                          (utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 16 * (13 - 3)) - shop_text_attack_damage.get_height()))
+            if isinstance(item, items.MaxHealShop):
+                shop_text_max_heal = utils.Resources.fonts["default"].render("25 coins", True, (255, 255, 255))
+                shop_text_max_heal = pygame.transform.scale(shop_text_max_heal,
+                                                                (shop_text_max_heal.get_width() * utils.DisplayerCalculator.factor//2,
+                                                                 shop_text_max_heal.get_height() * utils.DisplayerCalculator.factor//2))
+                game.screen.blit(shop_text_max_heal, (utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - shop_text_max_heal.get_width()//2,
+                                                          (utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 16 * (13 - 3)) - shop_text_max_heal.get_height()))
+            if isinstance(item, items.LifeUpgradeShop):
+                shop_text_life_upgrade = utils.Resources.fonts["default"].render("75 coins", True, (255, 255, 255))
+                shop_text_life_upgrade = pygame.transform.scale(shop_text_life_upgrade,
+                                                                (shop_text_life_upgrade.get_width() * utils.DisplayerCalculator.factor//2,
+                                                                 shop_text_life_upgrade.get_height() * utils.DisplayerCalculator.factor//2))
+                game.screen.blit(shop_text_life_upgrade, (utils.DisplayerCalculator.adjust_center[0] + (utils.DisplayerCalculator.factor * 16 * (13 - 4)) - shop_text_life_upgrade.get_width()//2,
+                                                      (utils.DisplayerCalculator.adjust_center[1] + utils.DisplayerCalculator.factor * 16 * 3.8) - shop_text_life_upgrade.get_height()))
+    elif game.current_room == game.dungeon.end_room:
+        if len(game.current_room.enemies) > 0 and game.current_room.enemies[0].is_boss:
+            boss_text = utils.Resources.fonts["default"].render("Roi des slimes : " + str(game.current_room.enemies[0].hp) + "/" + str(game.current_room.enemies[0].stats["max_hp"]), True, (255, 255, 255))
+            boss_text = pygame.transform.scale(boss_text,
+                                                  (boss_text.get_width() * utils.DisplayerCalculator.factor//1.5,
+                                                    boss_text.get_height() * utils.DisplayerCalculator.factor//1.5))
+            game.screen.blit(boss_text, (game.screen.get_width() // 2 - boss_text.get_width() // 2, 5))
+
 def launch_main_menu():
-    #screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) TODO
-    screen = pygame.display.set_mode((720, 480))
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     ui_manager = pygame_gui.UIManager(screen.get_size())
     crosshair = Crosshair()
 

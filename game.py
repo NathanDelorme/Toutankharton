@@ -1,7 +1,5 @@
 import pygame
 
-import characters
-import items
 import utils
 import pickle
 from characters import Player
@@ -13,7 +11,6 @@ class Game:
 
     def __init__(self):
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        #self.screen = pygame.display.set_mode((720, 480))
         utils.DisplayerCalculator.computeFactor(self.screen.get_size())
         self.tileset = map.Tileset()
         self.clock = pygame.time.Clock()
@@ -76,7 +73,6 @@ class Game:
             game = pickle.load(file)
             game.running = False
             game.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-            #self.screen = pygame.display.set_mode((720, 480))
             utils.DisplayerCalculator.computeFactor(game.screen.get_size())
             game.tileset = map.Tileset()
             game.clock = pygame.time.Clock()

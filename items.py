@@ -163,7 +163,7 @@ class Buyable(Item):
 
 class LifeUpgradeShop(Buyable):
     def __init__(self, game, x, y):
-        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+        super().__init__(game, utils.Resources.items["life_upgrade"], x, y, 75)
 
     def use(self, target):
 
@@ -171,12 +171,12 @@ class LifeUpgradeShop(Buyable):
             target.max_hp += 1
 
     def load(self):
-        self.image = utils.Resources.items["attack_speed_upgrade"]
+        self.image = utils.Resources.items["life_upgrade"]
         super().load()
 
 class DamageUpgradeShop(Buyable):
     def __init__(self, game, x, y):
-        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+        super().__init__(game, utils.Resources.items["attack_damage_upgrade"], x, y, 75)
 
     def use(self, target):
 
@@ -184,7 +184,7 @@ class DamageUpgradeShop(Buyable):
             target.strength += 0.5
 
     def load(self):
-        self.image = utils.Resources.items["attack_speed_upgrade"]
+        self.image = utils.Resources.items["attack_damage_upgrade"]
         super().load()
 
 
@@ -207,7 +207,7 @@ class AttackSpeedUpgradeShop(Buyable):
 
 class MaxHealShop(Buyable):
     def __init__(self, game, x, y):
-        super().__init__(game, utils.Resources.items["attack_speed_upgrade"], x, y, 75)
+        super().__init__(game, utils.Resources.items["max_heal_shop"], x, y, 25)
 
     def use(self, target):
 
@@ -215,5 +215,5 @@ class MaxHealShop(Buyable):
             target.hp = target.max_hp
 
     def load(self):
-        self.image = utils.Resources.items["attack_speed_upgrade"]
+        self.image = utils.Resources.items["max_heal_shop"]
         super().load()
