@@ -290,4 +290,12 @@ class KingSlime(Slime):
         elif rnd == 3:
             self.game.current_room.items.append(items.DamageUpgrade(self.game, player.rect.x, player.rect.y))
         self.game.current_room.set_cell(utils.Vector2(self.game.current_room.size.x // 2, self.game.current_room.size.y // 2), 4)
-        self.game.current_room.doors_rect.append()
+
+        pos = utils.Vector2(self.game.current_room.size.x // 2, self.game.current_room.size.y // 2)
+        cell_value = self.game.current_room.get_cell(pos)
+        disp_size = 16 * utils.DisplayerCalculator.factor
+        image = pygame.transform.scale(self.game.tileset.get_tile("rock"),
+                                       (16 * utils.DisplayerCalculator.factor, disp_size)), (
+            utils.DisplayerCalculator.adjust_center[0] + pos.x * disp_size,
+            utils.DisplayerCalculator.adjust_center[1] + pos.y * disp_size)
+        self.game.doors_rect.append((pygame.Rect(image[1], (disp_size, disp_size)), pos))

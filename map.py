@@ -495,7 +495,7 @@ class Room(List2D):
                     self.set_cell(pos, pattern.get_cell(pattern_pos))
 
     def generate_monsters(self):
-        monster_count = random.randint(1, 3)
+        monster_count = random.randint(1, 4)
         monster_cells = []
         for i in range(monster_count):
             available_cells = self.get_all_cells_of_value(0)
@@ -505,13 +505,13 @@ class Room(List2D):
             monster_cells.append(random_cell)
 
         for cell in monster_cells:
-            random.randint(0, 100)
-            if random.randint(0, 100) < 50:
+            rnd = random.randint(0, 100)
+            if rnd < 50:
                 self.enemies.append(characters.GreenSlime(self.game, utils.DisplayerCalculator.adjust_center[
                     0] + utils.DisplayerCalculator.factor * 12 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                           utils.DisplayerCalculator.adjust_center[
                                                               1] + utils.DisplayerCalculator.factor * 10 + cell.y * 16 * utils.DisplayerCalculator.factor))
-            elif random.randint(0, 100) < 85:
+            elif rnd < 85:
                 self.enemies.append(characters.OrangeSlime(self.game, utils.DisplayerCalculator.adjust_center[
                     0] + utils.DisplayerCalculator.factor * 14 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                            utils.DisplayerCalculator.adjust_center[
@@ -530,17 +530,19 @@ class Room(List2D):
             if not available_cells:
                 return
             random_cell = random.choice(available_cells)
+            if random_cell in items_cells:
+                continue
             items_cells.append(random_cell)
 
         for cell in items_cells:
-            random.randint(0, 100)
-            if random.randint(0, 100) < 85:
+            rnd = random.randint(0, 100)
+            if rnd < 85:
                 for i in range(random.randint(1, 3)):
                     self.items.append(items.Coin(self.game, utils.DisplayerCalculator.adjust_center[
                         0] + utils.DisplayerCalculator.factor * 6 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                                  utils.DisplayerCalculator.adjust_center[
                                                      1] + utils.DisplayerCalculator.factor * 6 + cell.y * 16 * utils.DisplayerCalculator.factor))
-            elif random.randint(0, 100) < 95:
+            elif rnd < 95:
                 self.items.append(items.Heal(self.game, utils.DisplayerCalculator.adjust_center[
                     0] + utils.DisplayerCalculator.factor * 4 + cell.x * 16 * utils.DisplayerCalculator.factor,
                                              utils.DisplayerCalculator.adjust_center[
