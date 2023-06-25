@@ -7,9 +7,8 @@ import map
 
 
 class Game:
-    best_score = 0
-
     def __init__(self):
+        self.score = 0
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         utils.DisplayerCalculator.computeFactor(self.screen.get_size())
         self.tileset = map.Tileset()
@@ -61,10 +60,15 @@ class Game:
             self.tileset = None
             self.screen = None
             self.clock = None
-            self.best_score = Game.best_score
-            score_file = open("save/score.dat", "w")
-            score_file.write(str(Game.best_score))
+
+            score_file = open("save/score.dat", "r")
+            score = int(score_file.read())
             score_file.close()
+
+            if self.score > score:
+                score_file = open("save/score.dat", "w")
+                score_file.write(str(self.score))
+                score_file.close()
             pickle.dump(self, file, pickle.HIGHEST_PROTOCOL)
 
     @staticmethod

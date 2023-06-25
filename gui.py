@@ -127,13 +127,15 @@ def launch_main_menu():
     ui_manager = pygame_gui.UIManager(screen.get_size())
     crosshair = Crosshair()
 
+    score_file = open("save/score.dat", "rb")
+
     title_text = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((screen.get_width() // 4, 0),
                                                                        (screen.get_width() // 2, screen.get_height() // 11)),
                                              text="Toutankharton",
                                              manager=ui_manager)
     best_score_text = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((screen.get_width() // 4, screen.get_height() // 11 * 1),
                                                                             (screen.get_width() // 2, screen.get_height() // 11)),
-                                                  text="Meilleur score: " + str(Game.best_score),
+                                                  text="Meilleur score: " + str(int(score_file.read())),
                                                   manager=ui_manager)
     new_game_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((screen.get_width() // 4, screen.get_height() // 11 * 3),
                                                                              (screen.get_width() // 2, screen.get_height() // 11)),
@@ -143,7 +145,7 @@ def launch_main_menu():
                                                                              (screen.get_width() // 2, screen.get_height() // 11)),
                                                    text="Continuer",
                                                    manager=ui_manager)
-    if not os.path.exists("save/savegame.dat"):
+    if not os.path.exists("save/savegame.dat") :
         continue_button.disable()
     quit_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((screen.get_width() // 4, screen.get_height() // 11 * 7),
                                                                          (screen.get_width() // 2, screen.get_height() // 11)),

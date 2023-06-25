@@ -9,9 +9,6 @@ import utils
 def launch_game():
     pygame.init()
 
-    score_file = open("save/score.dat", "rb")
-    Game.best_score = int(score_file.read())
-
     utils.Resources.load()
     selected_option = gui.launch_main_menu()
     game = None
@@ -82,14 +79,15 @@ def launch_game():
                         game.current_room = game.dungeon.get_cell(utils.Vector2(game.current_room.pos.x + 1, game.current_room.pos.y))
                     else:
                         game.level += 1
-                        if Game.best_score < game.level:
-                            Game.best_score = game.level - 1
+                        if game.score < game.level - 1:
+                            game.score = game.level - 1
                         game.player.rect.center = game.screen.get_rect().center
                         game.generate_dungeon(game)
                     tilemap = game.start_dungeon()
             game.draw()
 
             if game.player.hp <= 0:
+                game.save_game()
                 if os.path.exists("save/savegame.dat"):
                     os.remove("save/savegame.dat")
                 return
