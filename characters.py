@@ -82,17 +82,18 @@ class Player(Character):
 
     def actions(self, velocity=(0, 0)):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_z] or keys[pygame.K_s]:
-            if keys[pygame.K_z]:
-                velocity = (velocity[0], velocity[1] - self.speed)
-            if keys[pygame.K_s]:
-                velocity = (velocity[0], velocity[1] + self.speed)
+        if keys[pygame.K_z]:
+            velocity = (velocity[0], velocity[1] - self.speed)
+        if keys[pygame.K_s]:
+            velocity = (velocity[0], velocity[1] + self.speed)
+        if keys[pygame.K_q]:
+            velocity = (velocity[0] - self.speed, velocity[1])
+        if keys[pygame.K_d]:
+            velocity = (velocity[0] + self.speed, velocity[1])
 
-        elif keys[pygame.K_q] or keys[pygame.K_d]:
-            if keys[pygame.K_q]:
-                velocity = (velocity[0] - self.speed, velocity[1])
-            if keys[pygame.K_d]:
-                velocity = (velocity[0] + self.speed, velocity[1])
+        if velocity[0] != 0 and velocity[1] != 0:
+            velocity = (velocity[0] / math.sqrt(2), velocity[1] / math.sqrt(2))
+
         super().move(velocity)
 
         for bullet in self.bullets:
@@ -102,7 +103,12 @@ class Player(Character):
 
             for enemy in self.game.current_room.enemies:
                 if bullet.rect.colliderect(enemy.rect):
+                    if enemy.is_boss:
+                        if enemy.hp >= 25 and enemy.hp - self.strength < 25:
+                            #TODO : Boss fight
+                            pass
                     enemy.hp -= self.strength
+
                     if enemy.hp <= 0:
                         enemy.get_loot(self)
                         self.game.current_room.enemies.remove(enemy)
@@ -143,6 +149,7 @@ class Enemy(Character):
 
     def __init__(self, game, image, x, y, max_hp, speed, strength, attack_speed):
         super().__init__(game, image, x, y, max_hp, speed, strength, attack_speed)
+        self.is_boss = False
 
     def move(self, velocity=(0, 0)):
         super().move(velocity)
@@ -259,7 +266,7 @@ class RedSlime(Slime):
 
 class KingSlime(Slime):
     stats = {
-        "max_hp": 3,
+        "max_hp": 50,
         "speed": 50,
         "strength": 0,
         "attack_speed": 3
@@ -268,6 +275,7 @@ class KingSlime(Slime):
     def __init__(self, game, x, y):
         super().__init__(game, utils.Resources.characters["king_slime"], x, y, self.stats["max_hp"],
                          self.stats["speed"], self.stats["strength"], self.stats["attack_speed"])
+        self.is_boss = True
 
     def actions(self):
         self.move()
@@ -292,7 +300,6 @@ class KingSlime(Slime):
         self.game.current_room.set_cell(utils.Vector2(self.game.current_room.size.x // 2, self.game.current_room.size.y // 2), 4)
 
         pos = utils.Vector2(self.game.current_room.size.x // 2, self.game.current_room.size.y // 2)
-        cell_value = self.game.current_room.get_cell(pos)
         disp_size = 16 * utils.DisplayerCalculator.factor
         image = pygame.transform.scale(self.game.tileset.get_tile("rock"),
                                        (16 * utils.DisplayerCalculator.factor, disp_size)), (
