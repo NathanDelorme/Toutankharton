@@ -122,7 +122,7 @@ class DamageUpgrade(Item):
 
     def use(self, target):
         if self.rect.colliderect(target.rect):
-            target.strength += 1
+            target.strength += 0.5
             super().use(target)
 
     def load(self):

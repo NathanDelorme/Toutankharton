@@ -4,6 +4,8 @@ import time
 
 import pygame
 
+
+import items
 import projectiles
 import utils
 
@@ -39,7 +41,6 @@ class Character(pygame.sprite.Sprite):
             if abs(movement[0]) <= 20 and abs(movement[1]) <= 20:
                 self.rect.move_ip(movement[0], movement[1])
 
-
     def attack(self):
         current_time = time.time()
         if current_time - self.last_attack_time > self.attack_speed:
@@ -47,7 +48,6 @@ class Character(pygame.sprite.Sprite):
             return True
         else:
             return False
-
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -119,7 +119,8 @@ class Player(Character):
             rounded_angle = round(angle_to_target / (math.pi / 4)) * (math.pi / 4)
             direction = (math.cos(rounded_angle), math.sin(rounded_angle))
             bullet = projectiles.PaperBullet(self.game, self.rect.x + self.image.get_width() // 2,
-                                             self.rect.y + self.image.get_height() // 2, direction, self.stats["strength"])
+                                             self.rect.y + self.image.get_height() // 2, direction,
+                                             self.stats["strength"])
             self.bullets.append(bullet)
 
     def load(self):
@@ -191,7 +192,6 @@ class GreenSlime(Slime):
         super().move()
         super().attack()
 
-
     def load(self):
         self.image = utils.Resources.characters["green_slime"]
         super().load()
@@ -201,6 +201,7 @@ class GreenSlime(Slime):
 
     def get_loot(self, player):
         player.coins += random.randint(1, 3)
+
 
 class OrangeSlime(Slime):
     stats = {
@@ -218,7 +219,6 @@ class OrangeSlime(Slime):
         self.move()
         super().attack()
 
-
     def load(self):
         self.image = utils.Resources.characters["orange_slime"]
         super().load()
@@ -228,6 +228,7 @@ class OrangeSlime(Slime):
 
     def get_loot(self, player):
         player.coins += random.randint(2, 5)
+
 
 class RedSlime(Slime):
     stats = {
@@ -245,7 +246,6 @@ class RedSlime(Slime):
         self.move()
         super().attack()
 
-
     def load(self):
         self.image = utils.Resources.characters["red_slime"]
         super().load()
@@ -255,3 +255,39 @@ class RedSlime(Slime):
 
     def get_loot(self, player):
         player.coins += random.randint(3, 8)
+
+
+class KingSlime(Slime):
+    stats = {
+        "max_hp": 3,
+        "speed": 50,
+        "strength": 0,
+        "attack_speed": 3
+    }
+
+    def __init__(self, game, x, y):
+        super().__init__(game, utils.Resources.characters["king_slime"], x, y, self.stats["max_hp"],
+                         self.stats["speed"], self.stats["strength"], self.stats["attack_speed"])
+
+    def actions(self):
+        self.move()
+        super().attack()
+
+    def load(self):
+        self.image = utils.Resources.characters["king_slime"]
+        super().load()
+
+    def save(self):
+        super().save()
+
+    def get_loot(self, player):
+        player.coins += random.randint(25, 50)
+        rnd = random.randint(1, 3)
+        if rnd == 1:
+            self.game.current_room.items.append(items.LifeUpgrade(self.game, player.rect.x, player.rect.y))
+        elif rnd == 2:
+            self.game.current_room.items.append(items.AttackSpeedUpgrade(self.game, player.rect.x, player.rect.y))
+        elif rnd == 3:
+            self.game.current_room.items.append(items.DamageUpgrade(self.game, player.rect.x, player.rect.y))
+        self.game.current_room.set_cell(utils.Vector2(self.game.current_room.size.x // 2, self.game.current_room.size.y // 2), 4)
+        self.game.current_room.doors_rect.append()

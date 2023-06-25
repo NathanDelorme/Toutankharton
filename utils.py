@@ -39,7 +39,8 @@ class Resources:
         "player": pygame.image.load("assets/characters/player/player.png"),
         "green_slime": pygame.image.load("assets/characters/slimes/green_slime.png"),
         "orange_slime": pygame.image.load("assets/characters/slimes/orange_slime.png"),
-        "red_slime": pygame.image.load("assets/characters/slimes/red_slime.png")
+        "red_slime": pygame.image.load("assets/characters/slimes/red_slime.png"),
+        "king_slime": pygame.image.load("assets/characters/slimes/king_slime.png")
     }
 
     projectiles = {

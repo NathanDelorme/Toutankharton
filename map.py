@@ -408,8 +408,7 @@ class Room(List2D):
         pass
 
     def generate_end_room(self):
-        self.set_cell(Vector2(self.size.x // 2, self.size.y // 2), 4)
-
+        self.enemies.append(characters.KingSlime(self.game, self.game.screen.get_width() // 2, self.game.screen.get_height() // 2))
     def add_door(self, cardinal, adjacent_room):
         if cardinal == "N":
             self.doors["N"] = adjacent_room
