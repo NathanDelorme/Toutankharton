@@ -14,6 +14,7 @@ Au fur et à mesure de votre avancement, vous pourrez acheter des améliorations
 
 Les fonctionnalités principales sont les suivantes :
  - Affichage du jeu en temps réel,
+ - Affichage responsive design
  - Interactions entre le joueur, les slimes et les objets ramassables ou achetables,
  - La durée de votre partie ne dépend que de votre talent puisqu'il n'y a pas de limite dans le nombre d'étage que vous pourrez parcourir,
  - Combat de boss à chaque fin d'étage,
