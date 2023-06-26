@@ -33,16 +33,25 @@ La **souris** permet de diriger le tir des boulettes dans l'une des 8 directions
 La touche **ECHAP** permet de sauvegarder et quitter le jeu.
 
 ## Installation et exécution
+Dans un premier temps, assurez-vous d'avoir un logiciel permettant d'exécuter du code python dans une version 3.11.0 ou plus.
+Ensuite, clonez ce répertoire Git.
 
 Ce projet utilise la librairie Pygame, une bibliothèque Python dédiée à la création de jeux.
 Pour installer toutes les dépendances du projet, il faut se référer aux libraires présentes dans le fichier requirements.txt qui contient toutes les librairies externes utilisées.
+Ouvrez un terminal de commande et entrez les commandes suivantes une à une :
 
 ```bash
 pip install pygame
 pip install pygame_gui
 ```
 
-Lancer le script main.py et bon jeu !
+Si pip n'est pas reconnu sur votre ordinateur, essayez avec pip 3
+```bash
+pip3 install pygame
+pip3 install pygame_gui
+```
+
+Lancer le script main.py présent à la racine du projet et bon jeu !
 
 ## Auteurs
 - Nathan Delorme
